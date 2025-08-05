@@ -1,0 +1,32 @@
+spring:
+  # 테스트 환경 데이터베이스 설정 (H2 인메모리)
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  # 테스트 환경 JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false # 테스트에서는 SQL 로그 비활성화
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # H2 콘솔 활성화
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # 테스트 환경 Thymeleaf 설정
+  thymeleaf:
+    cache: false
+
+# 테스트 환경 로깅 설정
+logging:
+  level:
+    com.spring.toyproject: INFO
+    org.springframework.web: WARN
