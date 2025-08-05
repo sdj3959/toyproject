@@ -1,12 +1,124 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>$Title$</title>
-</head>
+<html
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
 <body>
-$END$
+    <!-- Navigation Bar -->
+    <header th:replace="~{layout/header :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        <!-- Alert Messages -->
+        <div
+                th:if="${message}"
+                class="alert alert-success alert-dismissible fade show"
+                role="alert">
+            <i class="bi bi-check-circle"></i>
+            <span th:text="${message}"></span>
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+
+        <div
+                th:if="${error}"
+                class="alert alert-danger alert-dismissible fade show"
+                role="alert">
+            <i class="bi bi-exclamation-triangle"></i>
+            <span th:text="${error}"></span>
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Page Content -->
+        <div class="fade-in">
+            <div class="row">
+                <div class="col-12">
+                    <div class="jumbotron bg-light p-5 rounded">
+                        <h1 class="display-4">
+                            <i class="bi bi-airplane-engines text-primary"></i>
+                            여행 기록 관리 시스템에 오신 것을 환영합니다!
+                        </h1>
+                        <p class="lead">
+                            소중한 여행 추억을 디지털로 보존하고 체계적으로 관리하세요.
+                        </p>
+                        <hr class="my-4" />
+                        <p>
+                            여행 계획부터 여행일지 작성, 사진 관리까지 모든 것을 한 곳에서
+                            관리할 수 있습니다.
+                        </p>
+                        <a
+                                class="btn btn-primary btn-lg"
+                                href="/dashboard"
+                                role="button">
+                            <i class="bi bi-house"></i> 대시보드로 이동
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-map display-4 text-primary"></i>
+                            <h5 class="card-title mt-3">여행 계획</h5>
+                            <p class="card-text">여행 계획을 세우고 관리하세요.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-journal-text display-4 text-success"></i>
+                            <h5 class="card-title mt-3">여행일지</h5>
+                            <p class="card-text">여행 중의 소중한 순간들을 기록하세요.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-images display-4 text-warning"></i>
+                            <h5 class="card-title mt-3">사진 갤러리</h5>
+                            <p class="card-text">여행 사진을 체계적으로 관리하세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div
+                            class="alert alert-info"
+                            role="alert">
+                        <h4 class="alert-heading">
+                            <i class="bi bi-info-circle"></i> 시작하기
+                        </h4>
+                        <p>
+                            아직 계정이 없으시다면
+                            <a
+                                    href="/signup"
+                                    class="alert-link"
+                            >회원가입</a
+                            >을, 이미 계정이 있으시다면
+                            <a
+                                    href="/login"
+                                    class="alert-link"
+                            >로그인</a
+                            >을 해주세요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/footer :: footer}"></footer>
 </body>
 </html>

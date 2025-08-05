@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a
+                        class="navbar-brand"
+                        href="/">
+                    <i class="bi bi-airplane-engines"></i>
+                    여행 기록 관리
+                </a>
+
+                <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div
+                        class="collapse navbar-collapse"
+                        id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a
+                                    class="nav-link"
+                                    href="/dashboard">
+                                <i class="bi bi-house"></i> 대시보드
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                    class="nav-link"
+                                    href="/trips">
+                                <i class="bi bi-map"></i> 여행 목록
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                    class="nav-link"
+                                    href="/travel-logs">
+                                <i class="bi bi-journal-text"></i> 여행일지
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                    class="nav-link"
+                                    href="/tags">
+                                <i class="bi bi-tags"></i> 태그 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                    class="nav-link"
+                                    href="/photos">
+                                <i class="bi bi-images"></i> 사진 갤러리
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Search Form -->
+                    <form
+                            class="d-flex me-3"
+                            role="search"
+                            action="/search"
+                            method="get">
+                        <input
+                                class="form-control me-2"
+                                type="search"
+                                name="q"
+                                placeholder="여행 검색..."
+                                th:value="${param.q}" />
+                        <button
+                                class="btn btn-outline-light"
+                                type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+
+                    <!-- User Menu -->
+                    <ul class="navbar-nav">
+                        <li
+                                class="nav-item dropdown"
+                                id="userDropdown"
+                                style="display: none">
+                            <a
+                                    class="nav-link dropdown-toggle"
+                                    href="#"
+                                    role="button"
+                                    data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle"></i>
+                                <span id="username">사용자</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a
+                                            class="dropdown-item"
+                                            href="/profile">
+                                        <i class="bi bi-person"></i> 프로필
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <a
+                                            class="dropdown-item"
+                                            href="#"
+                                            onclick="logout(); return false;">
+                                        <i class="bi bi-box-arrow-right"></i> 로그아웃
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li
+                                class="nav-item"
+                                id="loginLink">
+                            <a
+                                    class="nav-link"
+                                    href="/login">
+                                <i class="bi bi-box-arrow-in-right"></i> 로그인
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+</body>
+</html>
