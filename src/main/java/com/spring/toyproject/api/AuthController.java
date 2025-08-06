@@ -1,6 +1,7 @@
 package com.spring.toyproject.api;
 
 import com.spring.toyproject.domain.dto.common.ApiResponse;
+import com.spring.toyproject.domain.dto.request.LoginRequest;
 import com.spring.toyproject.domain.dto.request.SignUpRequest;
 import com.spring.toyproject.domain.dto.response.UserResponse;
 import com.spring.toyproject.service.UserService;
@@ -37,5 +38,20 @@ public class AuthController {
                         ApiResponse.success("회원가입이 성공적으로 완료되었습니다.", response)
                 );
 
+    }
+
+    /**
+     * 로그인 API - GET 방식은 URL에 파라미터가 노출될 가능성이 높음
+     * POST /api/auth/login
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest requestDto) {
+        log.info("로그인 요청: {}", requestDto.getUsernameOrEmail());
+
+        userService.authenticate(requestDto);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.success("로그인이 완료되었습니다.", null)
+        );
     }
 }
