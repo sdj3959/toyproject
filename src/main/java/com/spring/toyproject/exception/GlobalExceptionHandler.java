@@ -4,10 +4,13 @@ import com.spring.toyproject.exception.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 전역 예외처리 핸들러
@@ -40,5 +43,32 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
                 .body(errorResponse);
+    }
+
+    /**
+     * 유효성 검증 예외 처리 (@Valid, @Validated)
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException e) {
+        List<ErrorResponse.ValidationError> validationErrors = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(fieldError -> ErrorResponse.ValidationError.builder()
+                        .field(fieldError.getField())
+                        .message(fieldError.getDefaultMessage())
+                        .rejectedValue(fieldError.getRejectedValue())
+                        .build())
+                .collect(Collectors.toList());
+
+        log.warn("유효성 검증 실패: {}", validationErrors);
+
+        ErrorResponse response = ErrorResponse.builder()
+                .validationErrors(validationErrors)
+                .timestamp(LocalDateTime.now())
+                .error(ErrorCode.VALIDATION_ERROR.getCode())
+                .status(ErrorCode.VALIDATION_ERROR.getStatus())
+                .build();
+
+        return ResponseEntity.badRequest().body(response);
     }
 }

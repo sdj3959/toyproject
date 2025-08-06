@@ -1,16 +1,18 @@
 package com.spring.toyproject.exception.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
+// 값이 null인 프로퍼티는 응답에서 제외
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
 
     // 에러 발생 시간
@@ -29,18 +31,21 @@ public class ErrorResponse {
     private String path;
 
     // 유효성 검증 에러 목록
+    private List<ValidationError> validationErrors;
 
+    // 입력값 검증 오류 1개를 포장할 내부 클래스
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ValidationError {
+        // 에러가 난 필드명
+        private String field;
 
-    // 에러 응답객체 생성 팩토리 메서드
-    /*public static ErrorResponse of (String message, String path,
-                                    String detail, int status,
-                                    String error) {
-        return ErrorResponse.builder()
-                .error(error)
-                .detail(detail)
-                .path(path)
-                .status(status)
-                .timestamp(LocalDateTime.now())
-                .build();
-    }*/
+        // 에러 원인 메시지
+        private String message;
+
+        // 거부된 값 (클라이언트가 뭐라고 보냈는지)
+        private Object rejectedValue;
+    }
 }
