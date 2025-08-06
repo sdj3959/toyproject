@@ -1,6 +1,7 @@
 package com.spring.toyproject.api;
 
 import com.spring.toyproject.domain.dto.request.SignUpRequest;
+import com.spring.toyproject.domain.dto.response.UserResponse;
 import com.spring.toyproject.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ public class AuthController {
     public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequest requestDto) {
         log.info("회원가입 요청: {}", requestDto.getUsername());
 
-        userService.signup(requestDto);
+        UserResponse response = userService.signup(requestDto);
 
-        return ResponseEntity.ok().body("회원가입 완료!");
+        return ResponseEntity.ok().body(response);
     }
 }
