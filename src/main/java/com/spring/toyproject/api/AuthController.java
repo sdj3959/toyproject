@@ -1,5 +1,6 @@
 package com.spring.toyproject.api;
 
+import com.spring.toyproject.domain.dto.common.ApiResponse;
 import com.spring.toyproject.domain.dto.request.SignUpRequest;
 import com.spring.toyproject.domain.dto.response.UserResponse;
 import com.spring.toyproject.service.UserService;
@@ -30,6 +31,6 @@ public class AuthController {
 
         UserResponse response = userService.signup(requestDto);
 
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(ApiResponse.success("회원가입이 성공적으로 완료되었습니다.", response));
     }
 }
