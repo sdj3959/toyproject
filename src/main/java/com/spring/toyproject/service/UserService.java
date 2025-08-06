@@ -1,6 +1,7 @@
 package com.spring.toyproject.service;
 
 
+import com.spring.toyproject.domain.dto.request.LoginRequest;
 import com.spring.toyproject.domain.dto.request.SignUpRequest;
 import com.spring.toyproject.domain.dto.response.UserResponse;
 import com.spring.toyproject.domain.entity.User;
@@ -58,6 +59,33 @@ public class UserService {
         log.info("새로운 사용자 가입: {}", saved);
 
         return UserResponse.from(saved);
+    }
+
+    /**
+     * 로그인 로직
+     */
+    public void authenticate(LoginRequest loginRequest) {
+
+        // 사용자 조회 (사용자명인지 이메일인지 아직 모름)
+        String inputAccount = loginRequest.getUsernameOrEmail();
+        User user = userRepository.findByUsername(inputAccount)
+                .orElseGet(() -> userRepository.findByEmail(inputAccount)
+                        .orElseThrow(
+                                () -> new BusinessException(ErrorCode.USER_NOT_FOUND)
+                        )
+                );
+
+        // 비밀번호 검증
+        // 사용자가 입력한 패스워드 ( 평문 )
+        String inputPassword = loginRequest.getPassword();
+
+        // DB에 저장된 패스워드 ( 암호문 )
+        String storedPassword = user.getPassword();
+
+        // 평문을 다시 해시화해서 암호화한후 비교
+        if (!passwordEncoder.matches(inputPassword, storedPassword)) {
+            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+        }
     }
 
 }
