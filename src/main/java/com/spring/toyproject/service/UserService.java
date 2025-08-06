@@ -5,6 +5,7 @@ import com.spring.toyproject.domain.dto.request.SignUpRequest;
 import com.spring.toyproject.domain.dto.response.UserResponse;
 import com.spring.toyproject.domain.entity.User;
 import com.spring.toyproject.exception.BusinessException;
+import com.spring.toyproject.exception.ErrorCode;
 import com.spring.toyproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +32,11 @@ public class UserService {
 
         // 사용자명 중복 체크
         if (userRepository.existsByUsername(requestDto.getUsername())) {
-            throw new BusinessException("사용자명이 중복되었습니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_USERNAME);
         }
         // 이메일 중복 체크
         if (userRepository.existsByEmail(requestDto.getEmail())) {
-            throw new BusinessException("이메일이 중복되었습니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         // dto를 entity로 변경
