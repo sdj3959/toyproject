@@ -9,6 +9,7 @@ import com.spring.toyproject.exception.ErrorCode;
 import com.spring.toyproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    // 비밀번호 암호화를 위한 객체
+    private final PasswordEncoder passwordEncoder;
+
     /**
      * 회원 가입 로직
      */
@@ -39,11 +43,14 @@ public class UserService {
             throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
 
+        // 패스워드를 해시로 암호화
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+
         // dto를 entity로 변경
         User user = User.builder()
                 .email(requestDto.getEmail())
                 .username(requestDto.getUsername())
-                .password(requestDto.getPassword())
+                .password(encodedPassword)
                 .build();
 
         // db에 INSERT 명령
