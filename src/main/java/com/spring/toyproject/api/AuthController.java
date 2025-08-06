@@ -31,6 +31,11 @@ public class AuthController {
 
         UserResponse response = userService.signup(requestDto);
 
-        return ResponseEntity.ok().body(ApiResponse.success("회원가입이 성공적으로 완료되었습니다.", response));
+        return ResponseEntity
+                .ok()
+                .body(
+                        ApiResponse.success("회원가입이 성공적으로 완료되었습니다.", response)
+                );
+
     }
 }
