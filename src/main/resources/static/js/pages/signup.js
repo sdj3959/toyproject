@@ -1,3 +1,8 @@
+
+import { apiService } from '../utils/api.js';
+import { utils } from '../utils/util.js';
+
+
 // 회원가입 관련 함수들의 모음
 const SignupPage = () => {
 
@@ -12,15 +17,35 @@ const SignupPage = () => {
   };
 
   // 폼 제출 이벤트
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('form이 제출됨!');
+
+    const payload = {
+      username: state.$usernameInput.value,
+      password: state.$passwordInput.value,
+      email: state.$emailInput.value
+    };
+
+    try {
+      const response = await apiService.post('/api/auth/signup', payload);
+      // console.log(response);
+
+      if (response.success) {
+        // 성공 메시지 보여줌
+        utils.showMessage(response.message, 'success');
+        // 2초뒤 로그인 페이지로 자동 이동
+        utils.redirectTo('/login', 2000);
+      }
+    } catch (e) {
+      // 실패 메시지 렌더링
+      utils.showMessage(e.message, 'error');
+    }
   };
 
   // 이벤트 걸기
   const bindEvents = () => {
     // 1. form 제출 이벤트
-    state.$form.addEventListener('submit', handleSubmit);
+    state.$form?.addEventListener('submit', handleSubmit);
   };
 
   // 초기화 함수
