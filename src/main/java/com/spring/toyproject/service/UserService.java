@@ -88,4 +88,6 @@ public class UserService {
         }
     }
 
+    // 로그인 성공시 해야할 로직
+
 }
