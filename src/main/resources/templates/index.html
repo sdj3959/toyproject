@@ -9,31 +9,6 @@
 
     <!-- Main Content -->
     <main class="container my-4">
-        <!-- Alert Messages -->
-        <div
-                th:if="${message}"
-                class="alert alert-success alert-dismissible fade show"
-                role="alert">
-            <i class="bi bi-check-circle"></i>
-            <span th:text="${message}"></span>
-            <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"></button>
-        </div>
-
-        <div
-                th:if="${error}"
-                class="alert alert-danger alert-dismissible fade show"
-                role="alert">
-            <i class="bi bi-exclamation-triangle"></i>
-            <span th:text="${error}"></span>
-            <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"></button>
-        </div>
-
         <!-- Page Content -->
         <div class="fade-in">
             <div class="row">
@@ -41,20 +16,25 @@
                     <div class="jumbotron bg-light p-5 rounded">
                         <h1 class="display-4">
                             <i class="bi bi-airplane-engines text-primary"></i>
-                            여행 기록 관리 시스템에 오신 것을 환영합니다!
+                            <span id="welcomeMessage"
+                            >여행 기록 관리 시스템에 오신 것을 환영합니다!</span
+                            >
                         </h1>
-                        <p class="lead">
+                        <p
+                                class="lead"
+                                id="leadMessage">
                             소중한 여행 추억을 디지털로 보존하고 체계적으로 관리하세요.
                         </p>
                         <hr class="my-4" />
-                        <p>
+                        <p id="descriptionText">
                             여행 계획부터 여행일지 작성, 사진 관리까지 모든 것을 한 곳에서
                             관리할 수 있습니다.
                         </p>
                         <a
                                 class="btn btn-primary btn-lg"
                                 href="/dashboard"
-                                role="button">
+                                role="button"
+                                id="mainActionBtn">
                             <i class="bi bi-house"></i> 대시보드로 이동
                         </a>
                     </div>
@@ -95,11 +75,12 @@
                 <div class="col-12">
                     <div
                             class="alert alert-info"
-                            role="alert">
+                            role="alert"
+                            id="infoAlert">
                         <h4 class="alert-heading">
                             <i class="bi bi-info-circle"></i> 시작하기
                         </h4>
-                        <p>
+                        <p id="infoText">
                             아직 계정이 없으시다면
                             <a
                                     href="/signup"

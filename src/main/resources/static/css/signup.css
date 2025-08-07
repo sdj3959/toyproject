@@ -1,0 +1,185 @@
+/* 회원가입 페이지 전용 스타일 */
+
+/* 강한 검증 피드백 효과 */
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    animation: shake 0.5s ease-in-out;
+    background-color: #fff5f5;
+}
+
+.form-control.is-valid {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    background-color: #f8fff9;
+}
+
+/* 흔들림 애니메이션 */
+@keyframes shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+/* 검증 상태 아이콘 */
+.validation-icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.validation-icon.valid {
+    color: #198754;
+    animation: bounceIn 0.6s ease-in-out;
+}
+
+.validation-icon.invalid {
+    color: #dc3545;
+    animation: shake 0.5s ease-in-out;
+}
+
+/* 바운스 인 애니메이션 */
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 입력 필드 상태 표시 */
+.input-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input-group .form-control {
+    padding-right: 40px;
+    margin-bottom: 0.25rem;
+    width: 100%;
+}
+
+/* 검증 메시지 스타일 */
+.validation-message {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    animation: slideDown 0.3s ease-in-out;
+    padding: 0.25rem 0;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+}
+
+.validation-message.error {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+.validation-message.success {
+    color: #198754;
+    font-weight: 500;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 실시간 검증 상태 표시 */
+.real-time-validation {
+    position: relative;
+}
+
+.real-time-validation .form-control {
+    transition: all 0.3s ease-in-out;
+}
+
+.real-time-validation .form-control:focus {
+    transform: scale(1.02);
+}
+
+/* 중복 체크 중 로딩 표시 */
+.checking {
+    position: relative;
+}
+
+.checking::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0d6efd;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: translateY(-50%) rotate(0deg);
+    }
+    100% {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+/* 회원가입 폼 특별 스타일 */
+#signupForm {
+    transition: all 0.3s ease-in-out;
+}
+
+#signupForm.was-validated {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .input-group .form-control {
+        padding-right: 30px;
+    }
+
+    .validation-message {
+        font-size: 0.8rem;
+    }
+
+    .validation-icon {
+        font-size: 0.9rem;
+        margin-right: 0.3rem;
+    }
+}

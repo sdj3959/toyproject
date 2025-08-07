@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+    <header th:replace="~{layout/header :: header}"></header>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="mb-0">회원가입</h4>
+                    </div>
+                    <div class="card-body">
+                        <form
+                                method="post"
+                                id="signupForm"
+                                novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label
+                                                for="usernameInput"
+                                                class="form-label"
+                                        >사용자명 *</label
+                                        >
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="usernameInput"
+                                                name="username"
+                                                required
+                                                minlength="3"
+                                                maxlength="20"
+                                                pattern="^[a-zA-Z0-9_]+$"
+                                                placeholder="3-20자, 영문/숫자/_만 사용" />
+                                        <div class="form-text">
+                                            3-20자, 영문/숫자/언더스코어만 사용 가능
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label
+                                                for="email"
+                                                class="form-label"
+                                        >이메일 *</label
+                                        >
+                                        <input
+                                                type="email"
+                                                class="form-control"
+                                                id="email"
+                                                name="email"
+                                                required
+                                                placeholder="example@email.com" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label
+                                                for="password"
+                                                class="form-label"
+                                        >비밀번호 *</label
+                                        >
+                                        <input
+                                                type="password"
+                                                class="form-control"
+                                                id="password"
+                                                name="password"
+                                                required
+                                                minlength="6"
+                                                placeholder="8자 이상, 대소문자/숫자/특수문자 포함" />
+                                        <div class="form-text">
+                                            8자 이상, 대소문자/숫자/특수문자 포함
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label
+                                                for="confirmPassword"
+                                                class="form-label"
+                                        >비밀번호 확인 *</label
+                                        >
+                                        <input
+                                                type="password"
+                                                class="form-control"
+                                                id="confirmPassword"
+                                                name="confirmPassword"
+                                                placeholder="비밀번호를 다시 입력하세요" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                        id="signupBtn">
+                    <span
+                            class="spinner-border spinner-border-sm d-none"
+                            role="status"
+                            aria-hidden="true"></span>
+                                    회원가입
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4" />
+
+                        <div class="text-center">
+                            <p class="mb-2">이미 계정이 있으신가요?</p>
+                            <a
+                                    href="/login"
+                                    class="btn btn-outline-primary"
+                            >로그인</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

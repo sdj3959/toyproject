@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+    <header th:replace="~{layout/header :: header}"></header>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="mb-0">로그인</h4>
+                    </div>
+                    <div class="card-body">
+                        <form
+                                method="post"
+                                id="loginForm">
+                            <div class="mb-3">
+                                <label
+                                        for="usernameOrEmail"
+                                        class="form-label"
+                                >사용자명 또는 이메일</label
+                                >
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="usernameOrEmail"
+                                        name="usernameOrEmail"
+                                        required
+                                        placeholder="사용자명 또는 이메일을 입력하세요" />
+                                <div
+                                        class="invalid-feedback"
+                                        id="usernameOrEmailError"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label
+                                        for="password"
+                                        class="form-label"
+                                >비밀번호</label
+                                >
+                                <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password"
+                                        name="password"
+                                        required
+                                        placeholder="비밀번호를 입력하세요" />
+                                <div
+                                        class="invalid-feedback"
+                                        id="passwordError"></div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                        id="loginBtn">
+                    <span
+                            class="spinner-border spinner-border-sm d-none"
+                            role="status"
+                            aria-hidden="true"></span>
+                                    로그인
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4" />
+
+                        <div class="text-center">
+                            <p class="mb-2">계정이 없으신가요?</p>
+                            <a
+                                    href="/signup"
+                                    class="btn btn-outline-secondary"
+                            >회원가입</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
