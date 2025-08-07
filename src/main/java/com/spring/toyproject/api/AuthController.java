@@ -3,6 +3,7 @@ package com.spring.toyproject.api;
 import com.spring.toyproject.domain.dto.common.ApiResponse;
 import com.spring.toyproject.domain.dto.request.LoginRequest;
 import com.spring.toyproject.domain.dto.request.SignUpRequest;
+import com.spring.toyproject.domain.dto.response.AuthResponse;
 import com.spring.toyproject.domain.dto.response.UserResponse;
 import com.spring.toyproject.service.UserService;
 import jakarta.validation.Valid;
@@ -48,10 +49,10 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest requestDto) {
         log.info("로그인 요청: {}", requestDto.getUsernameOrEmail());
 
-        userService.authenticate(requestDto);
+        AuthResponse response = userService.authenticate(requestDto);
 
         return ResponseEntity.ok().body(
-                ApiResponse.success("로그인이 완료되었습니다.", null)
+                ApiResponse.success("로그인이 완료되었습니다.", response)
         );
     }
 }

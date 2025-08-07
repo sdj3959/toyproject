@@ -3,10 +3,12 @@ package com.spring.toyproject.service;
 
 import com.spring.toyproject.domain.dto.request.LoginRequest;
 import com.spring.toyproject.domain.dto.request.SignUpRequest;
+import com.spring.toyproject.domain.dto.response.AuthResponse;
 import com.spring.toyproject.domain.dto.response.UserResponse;
 import com.spring.toyproject.domain.entity.User;
 import com.spring.toyproject.exception.BusinessException;
 import com.spring.toyproject.exception.ErrorCode;
+import com.spring.toyproject.jwt.JwtProvider;
 import com.spring.toyproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,9 @@ public class UserService {
 
     // 비밀번호 암호화를 위한 객체
     private final PasswordEncoder passwordEncoder;
+
+    // JWT 토큰을 발급하는 객체
+    private final JwtProvider jwtProvider;
 
     /**
      * 회원 가입 로직
@@ -64,7 +69,7 @@ public class UserService {
     /**
      * 로그인 로직
      */
-    public void authenticate(LoginRequest loginRequest) {
+    public AuthResponse authenticate(LoginRequest loginRequest) {
 
         // 사용자 조회 (사용자명인지 이메일인지 아직 모름)
         String inputAccount = loginRequest.getUsernameOrEmail();
@@ -86,8 +91,16 @@ public class UserService {
         if (!passwordEncoder.matches(inputPassword, storedPassword)) {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }
+
+        // 로그인 성공시 해야할 로직
+        String token = jwtProvider.generateToken(user.getUsername());
+        log.info("사용자 로그인: {}", user.getUsername());
+
+        // 발급 후? -> 클라이언트에게 전송
+        return AuthResponse.of(token, UserResponse.from(user));
     }
 
-    // 로그인 성공시 해야할 로직
+
+
 
 }
