@@ -101,6 +101,11 @@ public class UserService {
     }
 
 
+    public boolean checkDuplicateUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
 
-
+    public boolean checkDuplicateEmail(String email) {
+        return userRepository.existsByUsername(email);
+    }
 }
