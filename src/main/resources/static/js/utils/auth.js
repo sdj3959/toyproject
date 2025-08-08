@@ -1,4 +1,7 @@
 // 인증 관련 모듈
+const TOKEN = 'token';
+const USER = 'user';
+
 export const authService = {
 
   // 인증 상태를 체크하는 함수
@@ -34,10 +37,16 @@ export const authService = {
     }
   },
 
+  login(token, user) {
+    localStorage.setItem(TOKEN, token);
+    localStorage.setItem(USER, user);
+  },
+
   // 로그아웃 처리
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem(TOKEN);
+    localStorage.removeItem(USER);
     window.location.href = '/';
   }
+
 };

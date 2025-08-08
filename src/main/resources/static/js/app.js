@@ -1,9 +1,8 @@
-import { authService } from './utils/auth.js'
+import { authService } from './utils/auth.js';
 
 /**
  * 우리 앱의 진입점 JS 파일
  */
-import {authService} from "./utils/auth";
 
 // 현재 페이지 확인 함수
 const getCurrentPage = () => {
@@ -17,10 +16,9 @@ const getCurrentPage = () => {
 
 const App = () => {
 
-// 외부 모듈 JS파일들을 로드
-// 현재 어떤 페이지에 진입했는지 알아야 그에 맞는 JS를 가져올 수 있음
+  // 외부 모듈 JS파일들을 로드
+  // 현재 어떤 페이지에 진입했는지 알아야 그에 맞는 JS를 가져올 수 있음
   const currentPage = getCurrentPage();
-  console.log(`currentPage: ${currentPage}`);
   // console.log(`currentPage: ${currentPage}`);
 
   // 공통 이벤트 바인딩
@@ -37,7 +35,7 @@ const App = () => {
 
   const init = async () => {
     try {
-      // header 업데이트
+      // header의 인증 UI 업데이트
       authService.updateHeaderUI();
 
       // 앱의 공통 이벤트 바인딩
