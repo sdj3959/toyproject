@@ -121,5 +121,21 @@ class TripRepositoryTest {
         assertThat(tripPage.getTotalPages()).isEqualTo(2);
     }
 
+    @Test
+    @DisplayName("여행 상태 변경 테스트")
+    void updateTripsStatus() {
+        //given
+        Trip trip = tripRepository.findById(testTrip3.getId()).orElseThrow();
+        //when
+        trip.updateStatus(TripStatus.ONGOING);
+        tripRepository.save(trip);
+        //then
+        Trip updatedTrip = tripRepository.findById(testTrip3.getId()).orElseThrow();
+        System.out.println("updatedTrip = " + updatedTrip);
+
+        assertThat(updatedTrip.getStatus()).isEqualTo(TripStatus.ONGOING);
+    }
+
+
 
 }
