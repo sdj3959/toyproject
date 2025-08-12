@@ -47,6 +47,11 @@ export const authService = {
     localStorage.removeItem(TOKEN);
     localStorage.removeItem(USER);
     window.location.href = '/';
-  }
+  },
+
+  // 단순히 로그인했는지만 확인하는 함수
+  isAuthenticated() {
+    return this.checkAuthStatus().isAuthenticated;
+  },
 
 };
