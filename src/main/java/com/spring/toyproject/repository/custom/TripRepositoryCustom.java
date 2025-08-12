@@ -29,7 +29,7 @@ public interface TripRepositoryCustom {
 
         // 정렬 조건
         @Builder.Default
-        private String sortBy = "createdAt"; // createdAt, startDate, endDate, budget, title
+        private String sortBy = "createdAt"; // createdAt, startDate, endDate, destination, title
 
         // 내림차 오름차 여부
         @Builder.Default
