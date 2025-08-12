@@ -9,7 +9,7 @@ import com.spring.toyproject.domain.entity.User;
 import com.spring.toyproject.exception.BusinessException;
 import com.spring.toyproject.exception.ErrorCode;
 import com.spring.toyproject.jwt.JwtProvider;
-import com.spring.toyproject.repository.UserRepository;
+import com.spring.toyproject.repository.base.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

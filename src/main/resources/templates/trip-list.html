@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+    <!-- Navigation Bar -->
+    <header th:replace="~{layout/header :: header}"></header>
+
+    <div class="container mt-4">
+        <!-- 페이지 헤더 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2><i class="bi bi-list-ul"></i> 여행 목록</h2>
+                    <button
+                            class="btn btn-primary"
+                            id="createTripBtn">
+                        <i class="bi bi-plus-circle"></i> 새 여행 만들기
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 필터 및 검색 섹션 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="bi bi-funnel"></i> 필터 및 검색</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label
+                                        for="statusFilter"
+                                        class="form-label"
+                                >상태</label
+                                >
+                                <select
+                                        class="form-select"
+                                        id="statusFilter">
+                                    <option value="">전체</option>
+                                    <option value="PLANNING">계획 중</option>
+                                    <option value="ONGOING">진행 중</option>
+                                    <option value="COMPLETED">완료</option>
+                                    <option value="CANCELLED">취소</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label
+                                        for="destinationFilter"
+                                        class="form-label"
+                                >목적지</label
+                                >
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="destinationFilter"
+                                        placeholder="목적지 검색" />
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label
+                                        for="titleFilter"
+                                        class="form-label"
+                                >제목</label
+                                >
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="titleFilter"
+                                        placeholder="제목 검색" />
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label
+                                        for="sortBy"
+                                        class="form-label"
+                                >정렬</label
+                                >
+                                <select
+                                        class="form-select"
+                                        id="sortBy">
+                                    <option value="createdAt">생성일</option>
+                                    <option value="startDate">시작일</option>
+                                    <option value="endDate">종료일</option>
+                                    <option value="title">제목</option>
+                                    <option value="destination">목적지</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div
+                                        class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <button
+                                                class="btn btn-outline-primary"
+                                                id="applyFilterBtn">
+                                            <i class="bi bi-search"></i> 검색
+                                        </button>
+                                        <button
+                                                class="btn btn-outline-secondary"
+                                                id="clearFilterBtn">
+                                            <i class="bi bi-x-circle"></i> 초기화
+                                        </button>
+                                    </div>
+                                    <div class="form-check">
+                                        <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                id="sortDirection"
+                                                checked />
+                                        <label
+                                                class="form-check-label"
+                                                for="sortDirection">
+                                            내림차순
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 여행 목록 섹션 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="bi bi-calendar-event"></i> 여행 목록
+                            </h5>
+                            <span
+                                    class="badge bg-light text-dark"
+                                    id="totalCount"
+                            >0개</span
+                            >
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- 로딩 상태 -->
+                        <div
+                                id="loadingContainer"
+                                class="text-center py-4">
+                            <div
+                                    class="spinner-border text-primary"
+                                    role="status">
+                                <span class="visually-hidden">로딩 중...</span>
+                            </div>
+                            <p class="mt-2">여행 목록을 불러오는 중...</p>
+                        </div>
+
+                        <!-- 여행 목록 컨테이너 -->
+                        <div
+                                id="tripsContainer"
+                                style="display: none">
+                            <!-- 여행 카드들이 여기에 동적으로 추가됩니다 -->
+                        </div>
+
+                        <!-- 빈 상태 -->
+                        <div
+                                id="emptyContainer"
+                                class="text-center py-4"
+                                style="display: none">
+                            <i
+                                    class="bi bi-calendar-x text-muted"
+                                    style="font-size: 4rem"></i>
+                            <h4 class="mt-3 text-muted">여행이 없습니다</h4>
+                            <p class="text-muted">첫 번째 여행을 만들어보세요!</p>
+                            <button
+                                    class="btn btn-primary"
+                                    id="createFirstTripBtn">
+                                <i class="bi bi-plus-circle"></i> 새 여행 만들기
+                            </button>
+                        </div>
+
+                        <!-- 에러 상태 -->
+                        <div
+                                id="errorContainer"
+                                class="text-center py-4"
+                                style="display: none">
+                            <i
+                                    class="bi bi-exclamation-triangle text-danger"
+                                    style="font-size: 4rem"></i>
+                            <h4 class="mt-3 text-danger">오류가 발생했습니다</h4>
+                            <p class="text-muted">여행 목록을 불러오는데 실패했습니다.</p>
+                            <button
+                                    class="btn btn-outline-primary"
+                                    id="retryBtn">
+                                <i class="bi bi-arrow-clockwise"></i> 다시 시도
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 페이징 네비게이션 -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="여행 목록 페이지 네비게이션">
+                    <ul
+                            class="pagination justify-content-center"
+                            id="paginationContainer">
+                        <!-- 페이징 버튼들이 여기에 동적으로 추가됩니다 -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- 페이지 크기 선택 -->
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <div
+                        class="btn-group"
+                        role="group"
+                        aria-label="페이지 크기 선택">
+                    <input
+                            type="radio"
+                            class="btn-check"
+                            name="pageSize"
+                            id="pageSize10"
+                            value="10"
+                            checked />
+                    <label
+                            class="btn btn-outline-secondary"
+                            for="pageSize10"
+                    >10개</label
+                    >
+
+                    <input
+                            type="radio"
+                            class="btn-check"
+                            name="pageSize"
+                            id="pageSize20"
+                            value="20" />
+                    <label
+                            class="btn btn-outline-secondary"
+                            for="pageSize20"
+                    >20개</label
+                    >
+
+                    <input
+                            type="radio"
+                            class="btn-check"
+                            name="pageSize"
+                            id="pageSize50"
+                            value="50" />
+                    <label
+                            class="btn btn-outline-secondary"
+                            for="pageSize50"
+                    >50개</label
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 여행 상세 모달 -->
+    <div
+            class="modal fade"
+            id="tripDetailModal"
+            tabindex="-1"
+            aria-labelledby="tripDetailModalLabel"
+            aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5
+                            class="modal-title"
+                            id="tripDetailModalLabel">
+                        여행 상세 정보
+                    </h5>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div
+                        class="modal-body"
+                        id="tripDetailModalBody">
+                    <!-- 여행 상세 정보가 여기에 동적으로 추가됩니다 -->
+                </div>
+                <div class="modal-footer">
+                    <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        닫기
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="editTripBtn">
+                        수정
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-danger"
+                            id="deleteTripBtn">
+                        삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>

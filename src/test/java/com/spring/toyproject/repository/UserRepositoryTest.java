@@ -1,7 +1,7 @@
 package com.spring.toyproject.repository;
 
 import com.spring.toyproject.domain.entity.User;
-import org.assertj.core.api.Assertions;
+import com.spring.toyproject.repository.base.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

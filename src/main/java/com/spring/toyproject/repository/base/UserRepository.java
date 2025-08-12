@@ -1,4 +1,4 @@
-package com.spring.toyproject.repository;
+package com.spring.toyproject.repository.base;
 
 import com.spring.toyproject.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+    <!-- Navigation Bar -->
+    <header th:replace="~{layout/header :: header}"></header>
+
+    <div class="container mt-4">
+        <!-- 사용자 정보 섹션 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">
+                            <i class="bi bi-person-circle"></i> 환영합니다!
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="card-title">사용자 정보</h5>
+                                <p class="card-text">
+                                    <strong>사용자명:</strong>
+                                    <span id="usernameSpan">로딩 중...</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>이메일:</strong>
+                                    <span id="emailSpan">로딩 중...</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="card-title">빠른 메뉴</h5>
+                                <div class="d-grid gap-2">
+                                    <button
+                                            class="btn btn-outline-primary"
+                                            id="tripListBtn">
+                                        <i class="bi bi-list-ul"></i> 여행 목록
+                                    </button>
+                                    <button
+                                            class="btn btn-outline-success"
+                                            id="createTripBtn">
+                                        <i class="bi bi-plus-circle"></i> 새 여행 만들기
+                                    </button>
+                                    <button
+                                            class="btn btn-outline-info"
+                                            id="travelLogListBtn">
+                                        <i class="bi bi-journal-text"></i> 여행일지 목록
+                                    </button>
+                                    <button
+                                            class="btn btn-outline-warning"
+                                            id="createTravelLogBtn">
+                                        <i class="bi bi-journal-plus"></i> 여행일지 작성
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 통계 정보 섹션 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0"><i class="bi bi-graph-up"></i> 여행 통계</h4>
+                    </div>
+                    <div class="card-body">
+                        <div
+                                class="row"
+                                id="statisticsContainer">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <div
+                                            class="h2 text-primary"
+                                            id="totalTrips">
+                                        0
+                                    </div>
+                                    <div class="text-muted">총 여행</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <div
+                                            class="h2 text-success"
+                                            id="totalTravelLogs">
+                                        0
+                                    </div>
+                                    <div class="text-muted">총 여행일지</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <div
+                                            class="h2 text-warning"
+                                            id="averageRating">
+                                        0.0
+                                    </div>
+                                    <div class="text-muted">평균 평점</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <div
+                                            class="h2 text-danger"
+                                            id="totalExpenses">
+                                        0
+                                    </div>
+                                    <div class="text-muted">총 지출 (원)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 최근 여행 목록 섹션 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="bi bi-calendar-event"></i> 최근 여행
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentTripsContainer">
+                            <div class="text-center">
+                                <div
+                                        class="spinner-border text-primary"
+                                        role="status">
+                                    <span class="visually-hidden">로딩 중...</span>
+                                </div>
+                                <p class="mt-2">여행 정보를 불러오는 중...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 최근 여행일지 섹션 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h4 class="mb-0">
+                            <i class="bi bi-journal-text"></i> 최근 여행일지
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentTravelLogsContainer">
+                            <div class="text-center">
+                                <div
+                                        class="spinner-border text-warning"
+                                        role="status">
+                                    <span class="visually-hidden">로딩 중...</span>
+                                </div>
+                                <p class="mt-2">여행일지 정보를 불러오는 중...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 로그아웃 버튼 -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <button
+                        class="btn btn-danger"
+                        id="logoutBtn">
+                    <i class="bi bi-box-arrow-right"></i> 로그아웃
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>
