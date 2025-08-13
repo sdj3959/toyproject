@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 토큰에서 사용자명을 추출
                 String username = jwtProvider.getUsernameFromToken(token);
 
-                // 시큐리에게 알려줄 인증정보(사용자명, 권한) 생성
+                // 시큐리티에게 알려줄 인증정보(사용자명, 권한) 생성
                 UsernamePasswordAuthenticationToken auth
                         = new UsernamePasswordAuthenticationToken(
                         username   // Principal: 컨트롤러가 사용할 인증된 유저의 식별자
