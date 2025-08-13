@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: head">
+    <title>여행 등록/수정</title>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header th:replace="layout/header :: header"></header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- 페이지 헤더 -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 id="pageTitle">새 여행 만들기</h2>
+                    <a
+                            href="/trips"
+                            class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> 목록으로
+                    </a>
+                </div>
+
+                <!-- 여행 등록/수정 폼 -->
+                <div class="card">
+                    <div class="card-body">
+                        <form
+                                id="tripForm"
+                                novalidate>
+                            <!-- 여행 제목 -->
+                            <div class="mb-3">
+                                <label
+                                        for="title"
+                                        class="form-label"
+                                >여행 제목 *</label
+                                >
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="title"
+                                        name="title"
+                                        placeholder="여행 제목을 입력하세요"
+                                        required />
+                                <div class="invalid-feedback">여행 제목을 입력해주세요.</div>
+                            </div>
+
+                            <!-- 여행 목적지 -->
+                            <div class="mb-3">
+                                <label
+                                        for="destination"
+                                        class="form-label"
+                                >목적지 *</label
+                                >
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="destination"
+                                        name="destination"
+                                        placeholder="여행 목적지를 입력하세요"
+                                        required />
+                                <div class="invalid-feedback">
+                                    여행 목적지를 입력해주세요.
+                                </div>
+                            </div>
+
+                            <!-- 여행 기간 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label
+                                            for="startDate"
+                                            class="form-label"
+                                    >시작일 *</label
+                                    >
+                                    <input
+                                            type="date"
+                                            class="form-control"
+                                            id="startDate"
+                                            name="startDate"
+                                            required />
+                                    <div class="invalid-feedback">시작일을 선택해주세요.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label
+                                            for="endDate"
+                                            class="form-label"
+                                    >종료일 *</label
+                                    >
+                                    <input
+                                            type="date"
+                                            class="form-control"
+                                            id="endDate"
+                                            name="endDate"
+                                            required />
+                                    <div class="invalid-feedback">종료일을 선택해주세요.</div>
+                                </div>
+                            </div>
+
+                            <!-- 여행 상태 -->
+                            <div class="mb-3">
+                                <label
+                                        for="status"
+                                        class="form-label"
+                                >여행 상태 *</label
+                                >
+                                <select
+                                        class="form-select"
+                                        id="status"
+                                        name="status"
+                                        required>
+                                    <option value="">상태를 선택하세요</option>
+                                    <option value="PLANNING">계획 중</option>
+                                    <option value="ONGOING">진행 중</option>
+                                    <option value="COMPLETED">완료</option>
+                                    <option value="CANCELLED">취소</option>
+                                </select>
+                                <div class="invalid-feedback">여행 상태를 선택해주세요.</div>
+                            </div>
+
+                            <!-- 예산 -->
+                            <div class="mb-3">
+                                <label
+                                        for="budget"
+                                        class="form-label"
+                                >예산 (원)</label
+                                >
+                                <input
+                                        type="number"
+                                        class="form-control"
+                                        id="budget"
+                                        name="budget"
+                                        placeholder="예산을 입력하세요"
+                                        min="0" />
+                                <div class="form-text">선택사항입니다.</div>
+                            </div>
+
+                            <!-- 여행 설명 -->
+                            <div class="mb-3">
+                                <label
+                                        for="description"
+                                        class="form-label"
+                                >여행 설명</label
+                                >
+                                <textarea
+                                        class="form-control"
+                                        id="description"
+                                        name="description"
+                                        rows="4"
+                                        placeholder="여행에 대한 설명을 입력하세요"></textarea>
+                                <div class="form-text">선택사항입니다.</div>
+                            </div>
+
+                            <!-- 버튼 그룹 -->
+                            <div class="d-flex justify-content-end gap-2">
+                                <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        id="cancelBtn">
+                                    취소
+                                </button>
+                                <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                        id="submitBtn">
+                    <span
+                            class="spinner-border spinner-border-sm d-none"
+                            role="status"></span>
+                                    저장
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer th:replace="layout/footer :: footer"></footer>
+
+</body>
+</html>

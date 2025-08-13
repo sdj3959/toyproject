@@ -54,4 +54,9 @@ export const authService = {
     return this.checkAuthStatus().isAuthenticated;
   },
 
+  // 토큰 가져오기
+  getToken() {
+    return localStorage.getItem(TOKEN);
+  },
+
 };

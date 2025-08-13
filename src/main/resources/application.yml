@@ -1,7 +1,7 @@
 
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/toy_project_clone
+    url: jdbc:mariadb://localhost:3306/toy_project
     username: root
     password: mariadb
   jpa:
@@ -30,6 +30,6 @@ logging:
 # jwt setting
 jwt:
   # secret key (실제 운영에서는 환경변수로 관리)
-  secret: xgvlyEyY3xOXlr2zKK74vzNx53hSNY6I8Pffbd7AiuY=
+  secret: MK/mhf3FIvBsuDfZfgDyJddADRHxqSRn3QLWE6B2Nvs=
   # 만료시간 (밀리초) - 24시간
   expiration: 86400000

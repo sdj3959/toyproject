@@ -226,6 +226,51 @@ export const DateUtils = {
     const date = new Date(dateString);
     return date.toLocaleDateString('ko-KR');
   },
+
+  /**
+   * 오늘로부터 특정 날짜까지 남은 일수(D-day) 계산
+   * @param {string} dateString - 대상 날짜 문자열
+   * @returns {number} 남은 일수 (미래면 1 이상, 오늘이면 0, 과거면 음수)
+   */
+  getDaysUntil: (dateString) => {
+    if (!dateString) return 0;
+    const target = new Date(dateString);
+    if (Number.isNaN(target.getTime())) return 0;
+
+    const today = new Date();
+    const startOfToday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    const startOfTarget = new Date(
+      target.getFullYear(),
+      target.getMonth(),
+      target.getDate()
+    );
+
+    const diffMs = startOfTarget.getTime() - startOfToday.getTime();
+    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  },
+
+  /**
+   * 대상 날짜가 미래인지 여부
+   * @param {string} dateString - 대상 날짜 문자열
+   * @returns {boolean} 미래 여부
+   */
+  isFuture: (dateString) => {
+    return DateUtils.getDaysUntil(dateString) > 0;
+  },
+
+  /**
+   * D-day 문자열 생성 (예: D-3). 미래가 아니면 빈 문자열
+   * @param {string} dateString - 대상 날짜 문자열
+   * @returns {string} D-day 문자열 또는 빈 문자열
+   */
+  formatDday: (dateString) => {
+    const days = DateUtils.getDaysUntil(dateString);
+    return days > 0 ? `D-${days}` : '';
+  },
 };
 
 // UI 관련 유틸리티

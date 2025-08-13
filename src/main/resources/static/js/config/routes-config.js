@@ -24,4 +24,8 @@ export const PAGE_CONFIG = {
     module: 'trip-list',
     requiresAuth: true,
   },
+  '/trips/new': {
+    module: 'trip-form',
+    requiresAuth: true
+  },
 };

@@ -1,3 +1,5 @@
+import { authService } from './auth.js';
+
 // API 서비스 모듈
 export const apiService = {
 
@@ -7,6 +9,13 @@ export const apiService = {
         'Content-Type': 'application/json',
       },
     };
+
+    // 헤더에 토큰 추가
+    const token = authService.getToken();
+    if (token) {
+      defaultOptions.headers['Authorization'] = `Bearer ${token}`;
+    }
+
 
     const config = { ...defaultOptions, ...options };
 

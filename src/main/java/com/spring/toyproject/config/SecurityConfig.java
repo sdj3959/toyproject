@@ -48,8 +48,10 @@ public class SecurityConfig {
                                         "/"
                                         , "/login"
                                         , "/signup"
+                                        , "/trips/**"
+                                        , "/dashboard"
                                 ).permitAll()
-                                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                                 .requestMatchers("/api/auth/**").permitAll()
 
                                 // 인증 및 권한이 필요한 경로
