@@ -32,6 +32,26 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 // 기본 인증 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable)
+
+                // 인가 설정
+                .authorizeHttpRequests(
+                        auth -> auth
+                                // 공개 접근 가능한 경로 (로그인 불필요)
+                                .requestMatchers(
+                                        "/"
+                                        , "/login"
+                                        , "/signup"
+                                ).permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                                .requestMatchers("/api/auth/**").permitAll()
+
+                                // 인증 및 권한이 필요한 경로
+                                .requestMatchers("/api/**").authenticated()
+
+                                // 기타 경로
+                                // 모든 다른 요청은 인증이 필요하다
+                                .anyRequest().authenticated()
+                        )
                 ;
 
         return http.build();
