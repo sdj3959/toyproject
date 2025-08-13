@@ -30,17 +30,15 @@ public class SecurityConfig {
                 // CSRF 공격 설정 off - JWT 인증방식 방해
                 .csrf(AbstractHttpConfigurer::disable)
                 // CORS 설정 off - 우리가 따로 나중에 수동설정
-                .cors(cors-> cors.configure(http))
+                .cors(cors -> cors.configure(http))
                 // 세션 관리 설정을 JWT에 맞게 함
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 로그인 기본 폼 제거
+                //  로그인 기본 폼 제거
                 .formLogin(AbstractHttpConfigurer::disable)
                 // 기본 인증 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable)
 
-                // 커스텀 필터 설정
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 
                 // 인가 설정
                 .authorizeHttpRequests(
@@ -55,15 +53,19 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/**").permitAll()
 
                                 // 인증 및 권한이 필요한 경로
+//                                .requestMatchers("/api/premium/**").hasAnyAuthority("VIP", "GOLD")
                                 .requestMatchers("/api/**").authenticated()
 
                                 // 기타 경로
                                 // 모든 다른 요청은 인증이 필요하다
                                 .anyRequest().authenticated()
-                        )
-                ;
+                )
+
+
+                // 커스텀 필터 설정
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        ;
 
         return http.build();
-
     }
 }

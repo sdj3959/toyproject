@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,11 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request
-            , HttpServletResponse response
-            , FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             // 클라이언트의 요청에서 들어온 토큰을 뜯어와야함.
             String token = extractTokenFromHeader(request);
@@ -42,24 +39,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 토큰에서 사용자명을 추출
                 String username = jwtProvider.getUsernameFromToken(token);
 
-                // 시큐리티에게 알려줄 인증정보(사용자명, 권한) 생성
+                // 시큐리에게 알려줄 인증정보(사용자명, 권한) 생성
                 UsernamePasswordAuthenticationToken auth
                         = new UsernamePasswordAuthenticationToken(
-                                username // Principal : 컨트롤러가 사용할 인증된 유저의 식별자
-                        , null // 비밀번호 저장: 일반적으로 저장 안 함
-//                        , List.of(new SimpleGrantedAuthority("COMMON"))
+                        username   // Principal: 컨트롤러가 사용할 인증된 유저의 식별자
+                        , null // 비밀번호 저장: 일반적으로 저장 안함
+                        , new ArrayList<>()
                 );
+
 
                 // 스프링 시큐리티에게 인증 성공을 알려줌
                 SecurityContextHolder.getContext().setAuthentication(auth);
                 log.debug("JWT 인증 성공: {}", username);
             }
+
         } catch (Exception e) {
             log.error("JWT 인증 오류 발생: {}", e.getMessage());
         }
 
         // 다음 필터로 요청 전달
         filterChain.doFilter(request, response);
+
     }
 
     private String extractTokenFromHeader(HttpServletRequest request) {
@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String bearerToken = request.getHeader("Authorization");
 
         // 2. 토큰을 파싱하면 앞에 접두사로 Bearer가 붙는데 이를 제거
-        if (StringUtils.hasText(bearerToken)&& bearerToken.startsWith("Bearer")) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
             return bearerToken.substring(7);
         }
         return null;
