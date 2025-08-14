@@ -10,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 여행 엔터티
@@ -60,6 +62,10 @@ public class Trip {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    // 여행일지와의 1:N 관계
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TravelLog> travelLogs = new ArrayList<>();
 
     @Builder
     public Trip(String title, String description, LocalDate startDate, LocalDate endDate, TripStatus status, String destination, Long budget, User user) {
