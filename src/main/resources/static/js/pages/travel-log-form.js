@@ -26,6 +26,7 @@ const TravelLogFormPage = () => {
     $thumbList: null,
   };
 
+  // 앱의 상태유지를 위한 전역변수 대용 데이터
   const state = { selectedTags: [], images: [] };
 
   const initElements = () => {
@@ -154,14 +155,21 @@ const TravelLogFormPage = () => {
   };
 
   const onImageInputChange = (e) => {
-    const files = Array.from(e.target.files || []);
+
+    // 지금 올린 파일 정보 배열
+    const files = [...e.target.files];
+
     const remain = 5 - state.images.length;
+
     const toAdd = files.slice(0, Math.max(0, remain));
+
     toAdd.forEach((file) => {
       if (!file.type.startsWith('image/')) return;
+      // 썸네일에서 img src속성에 넣기위한 변환작업
       const url = URL.createObjectURL(file);
       state.images.push({ file, url });
     });
+    // 썸네일 렌더링
     refreshThumbs();
     // 입력값 초기화하여 같은 파일을 다시 선택할 수 있도록
     e.target.value = '';
@@ -215,8 +223,14 @@ const TravelLogFormPage = () => {
         // 무시하고 수동 입력 허용
       }
     }
+
+    // 여행일지 폼 서버 전송이벤트
     $.$form?.addEventListener('submit', onSubmit);
+
+    // 이미지 업로드 이벤트
     $.$imageInput?.addEventListener('change', onImageInputChange);
+
+
     if ($.$back) {
       const tripId = new URLSearchParams(window.location.search).get('tripId');
       $.$back.href = `/trips/detail?tripId=${tripId ?? ''}`;
@@ -385,7 +399,7 @@ const TravelLogFormPage = () => {
     // 별점 선택
     const paintStars = (value) => {
       if (!$.$ratingStars) return;
-      [...$.$ratingStars.querySelectorAll('i')].forEach((별) => {
+      [...$.$ratingStars.querySelectorAll('i')].forEach((star) => {
         const v = parseInt(star.dataset.value);
         if (v <= value) {
           star.classList.remove('bi-star');
