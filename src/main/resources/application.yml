@@ -12,6 +12,11 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MariaDBDialect
         show_sql: true
+  # file upload setting
+  servlet:
+    multipart:
+      max-file-size: 10MB  # ???? ?? 1?? ?? ??? ??
+      max-request-size: 100MB  # ??? ???? ? ?? ??? ? ??
 
 server:
   port: 9003
