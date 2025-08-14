@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+    <header th:replace="~{layout/header :: header}"></header>
+    <main class="container mt-4">
+        <h2>여행일지 작성/수정</h2>
+        <form
+                id="travelLogForm"
+                novalidate>
+            <input
+                    type="hidden"
+                    id="tripId"
+                    th:value="${tripId}" />
+            <div class="mb-3">
+                <label
+                        for="title"
+                        class="form-label"
+                >제목</label
+                >
+                <input
+                        id="title"
+                        class="form-control"
+                        required
+                        maxlength="100" />
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label
+                            for="daySelect"
+                            class="form-label"
+                    >여행 일차 선택</label
+                    >
+                    <select
+                            id="daySelect"
+                            class="form-select">
+                        <option value="">여행 정보를 불러오는 중...</option>
+                    </select>
+                    <div class="form-text">
+                        일차를 선택하면 해당 날짜로 자동 설정됩니다.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label
+                            for="logDate"
+                            class="form-label"
+                    >날짜</label
+                    >
+                    <input
+                            id="logDate"
+                            type="date"
+                            class="form-control"
+                            required
+                            readonly />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label
+                        for="location"
+                        class="form-label"
+                >위치</label
+                >
+                <input
+                        id="location"
+                        class="form-control"
+                        maxlength="100" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">태그</label>
+                <div class="row g-2 align-items-center mb-2">
+                    <div class="col-md-4">
+                        <select
+                                id="tagCategorySelect"
+                                class="form-select">
+                            <option value="">카테고리 선택</option>
+                            <option value="LOCATION">장소</option>
+                            <option value="ACTIVITY">활동</option>
+                            <option value="FOOD">음식</option>
+                            <option value="TRANSPORT">교통</option>
+                            <option value="ACCOMMODATION">숙박</option>
+                            <option value="WEATHER">날씨</option>
+                            <option value="MOOD">기분</option>
+                            <option value="PEOPLE">사람</option>
+                            <option value="CULTURE">문화</option>
+                            <option value="NATURE">자연</option>
+                            <option value="CITY">도시</option>
+                            <option value="COUNTRYSIDE">시골</option>
+                            <option value="MOUNTAIN">산</option>
+                            <option value="BEACH">해변</option>
+                            <option value="MUSEUM">박물관</option>
+                            <option value="SHOPPING">쇼핑</option>
+                            <option value="NIGHTLIFE">야간생활</option>
+                            <option value="OTHER">기타</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8 position-relative">
+                        <input
+                                id="tagInput"
+                                class="form-control"
+                                placeholder="#태그 입력 후 Enter (추천 목록에서 선택 가능)" />
+                        <div
+                                id="tagSuggestions"
+                                class="list-group position-absolute w-100"
+                                style="z-index: 1050; display: none"></div>
+                    </div>
+                </div>
+                <div
+                        id="selectedTagsChips"
+                        class="d-flex flex-wrap gap-2 mb-2"></div>
+                <div class="form-text">
+                    선택된 태그:
+                    <span
+                            id="selectedTagsText"
+                            class="fw-semibold"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">기분</label>
+                <div
+                        id="moodGroup"
+                        class="btn-group"
+                        role="group"
+                        aria-label="기분 선택">
+                    <input
+                            type="hidden"
+                            id="mood" />
+                    <button
+                            type="button"
+                            class="btn btn-outline-secondary mood-option"
+                            data-value="좋음">
+                        <i class="bi bi-emoji-smile"></i> 좋음
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-outline-secondary mood-option"
+                            data-value="보통">
+                        <i class="bi bi-emoji-neutral"></i> 보통
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-outline-secondary mood-option"
+                            data-value="나쁨">
+                        <i class="bi bi-emoji-frown"></i> 나쁨
+                    </button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label
+                        for="expenses"
+                        class="form-label"
+                >지출(원)</label
+                >
+                <input
+                        id="expenses"
+                        type="number"
+                        min="0"
+                        class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">평점(1~5)</label>
+                <div
+                        id="ratingStars"
+                        class="d-flex align-items-center gap-1"
+                        style="font-size: 1.5rem; cursor: pointer">
+                    <input
+                            type="hidden"
+                            id="rating" />
+                    <i
+                            class="bi bi-star"
+                            data-value="1"></i>
+                    <i
+                            class="bi bi-star"
+                            data-value="2"></i>
+                    <i
+                            class="bi bi-star"
+                            data-value="3"></i>
+                    <i
+                            class="bi bi-star"
+                            data-value="4"></i>
+                    <i
+                            class="bi bi-star"
+                            data-value="5"></i>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label
+                        for="images"
+                        class="form-label"
+                >사진 업로드 (최대 5장)</label
+                >
+                <input
+                        id="images"
+                        type="file"
+                        class="form-control"
+                        accept="image/*"
+                        multiple />
+                <div
+                        id="thumbList"
+                        class="d-flex mt-2 align-items-start"></div>
+                <div class="form-text">
+                    사진은 저장 시 한 번에 업로드되며, 드래그하여 순서를 변경할 수
+                    있습니다.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label
+                        for="content"
+                        class="form-label"
+                >내용</label
+                >
+                <textarea
+                        id="content"
+                        class="form-control"
+                        rows="6"
+                        maxlength="2000"></textarea>
+            </div>
+            <div class="d-flex gap-2">
+                <button
+                        type="submit"
+                        class="btn btn-primary">
+                    저장
+                </button>
+                <a
+                        href="/trips/detail"
+                        id="backToDetail"
+                        class="btn btn-outline-secondary"
+                >돌아가기</a
+                >
+            </div>
+        </form>
+    </main>
+    <footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>
