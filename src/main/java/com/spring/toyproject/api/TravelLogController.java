@@ -36,6 +36,9 @@ public class TravelLogController {
             , @AuthenticationPrincipal String username
     ) {
         log.info("여행 일지 생성 API 호출 - 사용자 {}, 여행ID: {}", username, tripId);
+        for (MultipartFile file : files) {
+            log.info("첨부된 파일명: {}", file.getOriginalFilename());
+        }
 
         travelLogService.createTravelLog(requestDto, tripId, username, files);
 
