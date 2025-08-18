@@ -2,33 +2,26 @@ package com.spring.toyproject.service;
 
 import com.spring.toyproject.config.FileUploadConfig;
 import com.spring.toyproject.domain.dto.request.TravelLogRequestDto;
-import com.spring.toyproject.domain.entity.TravelLog;
-import com.spring.toyproject.domain.entity.TravelPhoto;
-import com.spring.toyproject.domain.entity.Trip;
-import com.spring.toyproject.domain.entity.User;
+import com.spring.toyproject.domain.entity.*;
 import com.spring.toyproject.exception.BusinessException;
 import com.spring.toyproject.exception.ErrorCode;
-import com.spring.toyproject.repository.base.TravelLogRepository;
-import com.spring.toyproject.repository.base.TravelPhotoRepository;
-import com.spring.toyproject.repository.base.TripRepository;
-import com.spring.toyproject.repository.base.UserRepository;
-import jakarta.transaction.Transactional;
+import com.spring.toyproject.repository.base.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
-@Transactional
+@Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class TravelLogService {
 
     private final FileUploadConfig fileUploadConfig;
@@ -37,6 +30,7 @@ public class TravelLogService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
     private final TravelPhotoRepository travelPhotoRepository;
+    private final TagRepository tagRepository;
 
     /**
      * 여행일지 생성
@@ -52,7 +46,7 @@ public class TravelLogService {
 
         log.info("사용자 ID - {}", user.getId());
 
-        // 여행을 조회
+        // 여행을 조회 (사용자 소유의 여행인지 재확인)
         Trip trip = tripRepository.findByIdAndUser(tripId, user)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TRIP_NOT_FOUND));
 
@@ -68,8 +62,16 @@ public class TravelLogService {
                 .trip(trip)
                 .build();
 
-        // 여행 일지 저장
-        TravelLog savedTravel = travelLogRepository.save(travelLog);
+        // 여행 일지 저장 -> 여행 일지의 ID가 생성됨
+        TravelLog savedTravelLog = travelLogRepository.save(travelLog);
+
+        // 해시태그가 있다면 해시태그도 중간테이블에 연계저장
+        List<Long> tagIds = request.getTagIds();
+        if (tagIds != null && !tagIds.isEmpty()) {
+            tagIds.forEach(tagId -> {
+                savedTravelLog.addTag(tagRepository.findById(tagId).orElseThrow());
+            });
+        }
 
         // 이미지가 있다면 이미지도 함께 INSERT
         if (imageFiles != null && !imageFiles.isEmpty()) {
@@ -83,8 +85,8 @@ public class TravelLogService {
                     // 텅빈 파일이거나 없는 파일은 스킵
                     if (file == null || file.isEmpty()) continue;
                     log.debug("{}번째 파일이 존재함...", i + 1);
-                    // 이미지 파일이 아닌 것은 스킵
-                    if (file.getContentType() != null|| !file.getContentType().startsWith("image/")) continue;
+                    // 이미지 파일이 아닌것은 스킵
+                    if (file.getContentType() == null || !file.getContentType().startsWith("image/")) continue;
 
                     log.debug("{}번째 파일 검증 통과...", i + 1);
 
@@ -103,7 +105,7 @@ public class TravelLogService {
                     String storedFileName = UUID.randomUUID() + ext;
 
                     // 실제 저장 명령
-                    // C:/Users/user/travels/uploads/kuromi/faewfaewfaewf-asdfasdfa.jpg
+                    // C:/Users/user/travels/uploads/kuromi/djksafdjlsafjl-djflsdj.jpg
                     Path target = userBasePath.resolve(storedFileName);
                     Files.copy(file.getInputStream(), target);
 
@@ -111,20 +113,22 @@ public class TravelLogService {
 
                     // 2. 메타데이터를 디비에 저장하는 로직
                     TravelPhoto photo = TravelPhoto.builder()
-                            .displayOrder(i+1)
+                            .displayOrder(i + 1)
                             .originalFilename(originalFilename)
                             .storedFilename(storedFileName)
-                            .filePath("/uploads/"+username+"/"+storedFileName)
-                            .travelLog(savedTravel)
+                            .filePath("/uploads/" + username + "/" + storedFileName)
+                            .travelLog(savedTravelLog)
                             .build();
-
 
                     travelPhotoRepository.save(photo);
                     log.debug("{}번째 데이터베이스 저장 완료...", i + 1);
+
                 } catch (Exception e) {
                     throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
                 }
+
             }
+
         }
     }
 }
