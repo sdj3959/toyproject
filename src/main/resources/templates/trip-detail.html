@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/head :: head"></head>
+<body>
+    <header th:replace="layout/header :: header"></header>
+
+    <main class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <!-- 페이지 헤더 -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>여행 상세보기</h2>
+                    <div>
+                        <button
+                                id="editBtn"
+                                class="btn btn-primary me-2">
+                            <i class="fas fa-edit"></i> 수정
+                        </button>
+                        <button
+                                id="deleteBtn"
+                                class="btn btn-danger">
+                            <i class="fas fa-trash"></i> 삭제
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 로딩 상태 -->
+                <div
+                        id="loadingContainer"
+                        class="text-center py-5">
+                    <div
+                            class="spinner-border text-primary"
+                            role="status">
+                        <span class="visually-hidden">로딩 중...</span>
+                    </div>
+                    <p class="mt-2">여행 정보를 불러오는 중...</p>
+                </div>
+
+                <!-- 에러 상태 -->
+                <div
+                        id="errorContainer"
+                        class="alert alert-danger d-none"
+                        role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="errorMessage">여행 정보를 불러올 수 없습니다.</span>
+                </div>
+
+                <!-- 여행 상세 정보 -->
+                <div
+                        id="tripDetailContainer"
+                        class="d-none">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3
+                                    id="tripTitle"
+                                    class="mb-0"></h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>기본 정보</h5>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <th width="30%">목적지:</th>
+                                            <td id="tripDestination"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>시작일:</th>
+                                            <td id="tripStartDate"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>종료일:</th>
+                                            <td id="tripEndDate"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>기간:</th>
+                                            <td id="tripDuration"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>상세 정보</h5>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <th width="30%">상태:</th>
+                                            <td>
+                          <span
+                                  id="tripStatus"
+                                  class="badge"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>예산:</th>
+                                            <td id="tripBudget"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>생성일:</th>
+                                            <td id="tripCreatedAt"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>수정일:</th>
+                                            <td id="tripUpdatedAt"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- 여행 설명 -->
+                            <div class="mt-4">
+                                <h5>여행 설명</h5>
+                                <div
+                                        id="tripDescription"
+                                        class="border rounded p-3 bg-light">
+                                    <!-- 여행 설명 내용 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 여행일지 목록 -->
+                    <div class="card">
+                        <div
+                                class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">여행일지 목록</h4>
+                            <button
+                                    id="addTravelLogBtn"
+                                    class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> 여행일지 추가
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <!-- 여행일지 로딩 상태 -->
+                            <div
+                                    id="travelLogsLoadingContainer"
+                                    class="text-center py-3">
+                                <div
+                                        class="spinner-border spinner-border-sm text-primary"
+                                        role="status">
+                                    <span class="visually-hidden">로딩 중...</span>
+                                </div>
+                                <span class="ms-2">여행일지를 불러오는 중...</span>
+                            </div>
+
+                            <!-- 여행일지 에러 상태 -->
+                            <div
+                                    id="travelLogsErrorContainer"
+                                    class="alert alert-warning d-none"
+                                    role="alert">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span id="travelLogsErrorMessage"
+                                >여행일지를 불러올 수 없습니다.</span
+                                >
+                            </div>
+
+                            <!-- 여행일지 목록 -->
+                            <div
+                                    id="travelLogsContainer"
+                                    class="d-none">
+                                <div id="travelLogsList">
+                                    <!-- 여행일지 목록이 여기에 동적으로 추가됩니다 -->
+                                </div>
+
+                                <!-- 여행일지가 없을 때 -->
+                                <div
+                                        id="travelLogsEmptyContainer"
+                                        class="text-center py-5 d-none">
+                                    <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+                                    <h5 class="text-muted">아직 여행일지가 없습니다</h5>
+                                    <p class="text-muted">첫 번째 여행일지를 작성해보세요!</p>
+                                    <button
+                                            id="createFirstTravelLogBtn"
+                                            class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> 여행일지 작성하기
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 삭제 확인 모달 -->
+    <div
+            class="modal fade"
+            id="deleteConfirmModal"
+            tabindex="-1"
+            aria-labelledby="deleteConfirmModalLabel"
+            aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5
+                            class="modal-title"
+                            id="deleteConfirmModalLabel">
+                        여행 삭제 확인
+                    </h5>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>정말로 이 여행을 삭제하시겠습니까?</p>
+                    <p class="text-danger">
+                        <strong
+                        >이 작업은 되돌릴 수 없으며, 관련된 모든 여행일지도 함께
+                            삭제됩니다.</strong
+                        >
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        취소
+                    </button>
+                    <button
+                            type="button"
+                            id="confirmDeleteBtn"
+                            class="btn btn-danger">
+                        삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/footer :: footer"></footer>
+
+</body>
+</html>
