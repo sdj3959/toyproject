@@ -101,7 +101,7 @@ public class TripController {
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<TagResponseDto>>> searchTags(@RequestParam(name = "keyword") String keyword) {
         List<TagResponseDto> list = tagService.searchTags(keyword);
-        return ResponseEntity.ok(ApiResponse.success(list));
+        return ResponseEntity.ok(ApiResponse.success("[%s] 검색어를 통한 조회 성공!".formatted(keyword),list));
     }
 
 }
