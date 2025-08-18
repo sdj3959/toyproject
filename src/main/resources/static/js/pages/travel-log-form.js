@@ -62,6 +62,7 @@ const TravelLogFormPage = () => {
     // 1. 해시태그 INSERT
     await ensureNewTagsCreated();
 
+    // 2. 여행 일지 INSERT를 위한 페이로드 작성
     const payload = {
       title: $.$title.value.trim(),
       content: $.$content.value || null,

@@ -2,15 +2,20 @@ package com.spring.toyproject.service;
 
 
 import com.spring.toyproject.domain.dto.request.TagRequestDto;
+import com.spring.toyproject.domain.dto.response.TagResponseDto;
 import com.spring.toyproject.domain.entity.Tag;
+import com.spring.toyproject.domain.entity.TagCategory;
 import com.spring.toyproject.exception.BusinessException;
 import com.spring.toyproject.exception.ErrorCode;
 import com.spring.toyproject.repository.base.TagRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -21,7 +26,7 @@ public class TagService {
     private final TagRepository tagRepository;
 
     // 해시 태그 생성 처리
-    public void createTag(TagRequestDto requestDto) {
+    public TagResponseDto createTag(TagRequestDto requestDto) {
 
         // 멱등 처리 (race condition 처리)
         // 혹시나 프론트에서 당연히 한 번 중복을 검증하지만 서버에서 한 번 더 검증
@@ -36,6 +41,18 @@ public class TagService {
                 .color(requestDto.getColor())
                 .build();
 
-        tagRepository.save(tag);
+        // 생성된 이후에 ID가 필요하다.
+        Tag savedTag = tagRepository.save(tag);
+        // 클라이언트에게 ID가 포함된 정보를 리턴
+        return TagResponseDto.from(savedTag);
+    }
+
+    // 카테고리로 해시태그 목록 가져오기
+    @Transactional(readOnly = true)
+    public List<TagResponseDto> getTagsByCategory(TagCategory category) {
+
+        return tagRepository.findByCategoryOrderByName(category).stream()
+                .map(TagResponseDto::from)
+                .collect(Collectors.toList());
     }
 }
