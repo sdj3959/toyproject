@@ -55,4 +55,21 @@ public class TagService {
                 .map(TagResponseDto::from)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 검색어가 포함된 해시태그 목록을 가져오기
+     */
+    @Transactional(readOnly = true)
+    public List<TagResponseDto> searchTags(String keyword) {
+        /*
+            SELECT *
+            FROM tags
+            WHERE name LIKE '%keyword%'
+         */
+        return tagRepository.findByNameContaining(keyword)
+                .stream()
+                .map(TagResponseDto::from)
+                .collect(Collectors.toList())
+                ;
+    }
 }

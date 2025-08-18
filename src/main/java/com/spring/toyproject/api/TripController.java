@@ -3,10 +3,12 @@ package com.spring.toyproject.api;
 import com.spring.toyproject.domain.dto.common.ApiResponse;
 import com.spring.toyproject.domain.dto.request.TripRequest;
 import com.spring.toyproject.domain.dto.request.TripSearchRequestDto;
+import com.spring.toyproject.domain.dto.response.TagResponseDto;
 import com.spring.toyproject.domain.dto.response.TripDetailDto;
 import com.spring.toyproject.domain.dto.response.TripListItemDto;
 import com.spring.toyproject.domain.entity.Trip;
 import com.spring.toyproject.repository.custom.TripRepositoryCustom;
+import com.spring.toyproject.service.TagService;
 import com.spring.toyproject.service.TripService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class TripController {
 
     private final TripService tripService;
+    private final TagService tagService;
 
     /**
      * 여행 생성 API
@@ -87,6 +92,16 @@ public class TripController {
         return ResponseEntity.ok().body(
                 ApiResponse.success("여행(id: $s) 단일 조회 되었습니다.".formatted(tripId), trip)
         );
+    }
+
+    /**
+     * 검색어가 포함된 해시태그 목록 가져오는 API
+     * GET /api/tags/search?keyword={tagName}
+     */
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<TagResponseDto>>> searchTags(@RequestParam(name = "keyword") String keyword) {
+        List<TagResponseDto> list = tagService.searchTags(keyword);
+        return ResponseEntity.ok(ApiResponse.success(list));
     }
 
 }

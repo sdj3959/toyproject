@@ -343,6 +343,7 @@ const TravelLogFormPage = () => {
         $.$tagSuggestions.style.display = 'none';
         return;
       }
+      // 해시태그에 있는 # 을 제거하는 코드
       const keyword = value.slice(1);
       if (!keyword) {
         showSuggestions(cachedCategoryTags);

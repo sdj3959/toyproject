@@ -48,4 +48,14 @@ public class TagController {
                 ApiResponse.success("해시태그 목록이 조회됨", list)
         );
     }
+
+    /**
+     * 검색어가 포함된 해시태그 목록 가져오는 API
+     * GET /api/tags/search?keyword={tagName}
+     */
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<TagResponseDto>>> searchTags(@RequestParam(name = "keyword") String keyword) {
+        List<TagResponseDto> list = tagService.searchTags(keyword);
+        return ResponseEntity.ok(ApiResponse.success("[%s] 검색어를 통한 조회 성공!".formatted(keyword), list));
+    }
 }
