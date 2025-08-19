@@ -4,6 +4,7 @@ import com.spring.toyproject.config.FileUploadConfig;
 import com.spring.toyproject.domain.dto.request.TravelLogRequestDto;
 import com.spring.toyproject.domain.dto.response.TagResponseDto;
 import com.spring.toyproject.domain.dto.response.TravelLogResponseDto;
+import com.spring.toyproject.domain.dto.response.TravelPhotoResponseDto;
 import com.spring.toyproject.domain.entity.*;
 import com.spring.toyproject.exception.BusinessException;
 import com.spring.toyproject.exception.ErrorCode;
@@ -20,9 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -143,6 +142,7 @@ public class TravelLogService {
     /**
      * 여행별 여행일지 목록 조회
      */
+    @Transactional(readOnly = true)
     public Page<TravelLogResponseDto> getTravelLogsByTrip(String username, Long tripId, TravelLogRepositoryCustom.TravelLogSearchCondition condition, Pageable pageable) {
 
         // 사용자 조회
@@ -189,7 +189,7 @@ public class TravelLogService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.TRAVEL_LOG_NOT_FOUND));
 
         // 여행일지가 사용자의 여행에 속하는지 다시한번 확인
-        if (!travelLog.getTrip().getUser().equals(username)) {
+        if (!travelLog.getTrip().getUser().getUsername().equals(username)) {
             throw new BusinessException(ErrorCode.TRAVEL_LOG_ACCESS_DENIED);
         }
 
@@ -200,7 +200,21 @@ public class TravelLogService {
     public List<TagResponseDto> getTagsByTravelLog(String username, Long travelLogId) {
 
         List<Tag> tags = travelLogTagRepository.findTagsByTravelLogId(travelLogId);
-
         return tags.stream().map(TagResponseDto::from).collect(Collectors.toList());
+    }
+
+    public List<TravelPhotoResponseDto> getPhotos(Long travelLogId, String username) {
+
+        // 여행일지 조회
+        TravelLog travelLog = travelLogRepository.findById(travelLogId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TRAVEL_LOG_NOT_FOUND));
+
+        List<TravelPhoto> photos
+                = travelPhotoRepository.findByTravelLogOrderByDisplayOrderAsc(travelLog);
+
+        return photos.stream()
+                .map(TravelPhotoResponseDto::from)
+                .collect(Collectors.toList());
+
     }
 }
