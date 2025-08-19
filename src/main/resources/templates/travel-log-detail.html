@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+    <header th:replace="~{layout/header :: header}"></header>
+
+    <main class="container mt-4">
+        <div
+                id="loadingContainer"
+                class="text-center py-5">
+            <div
+                    class="spinner-border text-primary"
+                    role="status">
+                <span class="visually-hidden">로딩 중...</span>
+            </div>
+            <p class="mt-2">여행일지를 불러오는 중...</p>
+        </div>
+
+        <div
+                id="errorContainer"
+                class="alert alert-danger d-none">
+            여행일지를 불러올 수 없습니다.
+        </div>
+
+        <div
+                id="detailContainer"
+                class="d-none">
+            <div class="row">
+                <div class="col-12">
+                    <!-- 사진 캐러셀 -->
+                    <div
+                            id="photoCarouselContainer"
+                            class="mb-3 d-none">
+                        <div
+                                id="photoCarousel"
+                                class="carousel slide"
+                                data-bs-interval="false"
+                                style="position: relative">
+                            <div
+                                    class="carousel-indicators"
+                                    id="photoCarouselIndicators"></div>
+                            <div
+                                    class="carousel-inner"
+                                    id="photoCarouselInner"
+                                    style="position: relative"></div>
+                            <!-- hide default arrows, use overlay buttons instead (inside image area) -->
+                            <div
+                                    style="
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    right: 0;
+                    bottom: 32px;
+                    pointer-events: none;
+                  ">
+                                <button
+                                        id="carouselOverlayPrev"
+                                        type="button"
+                                        aria-label="previous"
+                                        style="
+                      position: absolute;
+                      left: 16px;
+                      top: 50%;
+                      transform: translateY(-50%);
+                      width: 44px;
+                      height: 44px;
+                      border-radius: 50%;
+                      background: rgba(0, 0, 0, 0.45);
+                      color: #fff;
+                      border: none;
+                      display: none;
+                      align-items: center;
+                      justify-content: center;
+                      z-index: 5;
+                      pointer-events: auto;
+                    ">
+                                    &lt;
+                                </button>
+                                <button
+                                        id="carouselOverlayNext"
+                                        type="button"
+                                        aria-label="next"
+                                        style="
+                      position: absolute;
+                      right: 16px;
+                      top: 50%;
+                      transform: translateY(-50%);
+                      width: 44px;
+                      height: 44px;
+                      border-radius: 50%;
+                      background: rgba(0, 0, 0, 0.45);
+                      color: #fff;
+                      border: none;
+                      display: none;
+                      align-items: center;
+                      justify-content: center;
+                      z-index: 5;
+                      pointer-events: auto;
+                    ">
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2
+                                id="travelLogTitle"
+                                class="mb-0"></h2>
+                        <div id="actions"></div>
+                    </div>
+                    <div
+                            id="travelLogMeta"
+                            class="text-muted mb-3"></div>
+                    <div
+                            id="travelLogRating"
+                            class="mb-3"></div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="travelLogContent"></div>
+                            <hr />
+                            <div class="mt-2">
+                                <strong>태그:</strong> <span id="travelLogTags"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>

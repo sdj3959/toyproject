@@ -64,4 +64,10 @@ public class PageController {
         return "travel-log-list";
     }
 
+    // 여행 일지 상세보기 페이지
+    @GetMapping("/travel-logs/detail")
+    public String travelDetail() {
+        return "travel-log-detail";
+    }
+
 }

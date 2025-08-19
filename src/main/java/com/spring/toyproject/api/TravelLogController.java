@@ -2,6 +2,7 @@ package com.spring.toyproject.api;
 
 import com.spring.toyproject.domain.dto.common.ApiResponse;
 import com.spring.toyproject.domain.dto.request.TravelLogRequestDto;
+import com.spring.toyproject.domain.dto.response.TagResponseDto;
 import com.spring.toyproject.domain.dto.response.TravelLogResponseDto;
 import com.spring.toyproject.repository.custom.TravelLogRepositoryCustom;
 import com.spring.toyproject.service.TravelLogService;
@@ -82,5 +83,34 @@ public class TravelLogController {
         Page<TravelLogResponseDto> travelLogs = travelLogService.getTravelLogsByTrip(username, tripId, condition, pageable);
 
         return ResponseEntity.ok(ApiResponse.success("", travelLogs));
+    }
+
+    /**
+     * 여행일지 상세 조회 API
+     * GET /api/travel-logs/{travelLogId}
+     */
+    @GetMapping("/{travelLogId}")
+    public ResponseEntity<?> getTravelLogDetail(
+            @AuthenticationPrincipal String username,
+            @PathVariable(name = "travelLogId") Long travelLogId) {
+
+        log.info("여행일지 상세 조회 API 호출 - 사용자: {}, 여행일지 ID: {}", username, travelLogId);
+
+        TravelLogResponseDto travelLogDetail = travelLogService.getTravelLogDetail(username, travelLogId);
+
+        return ResponseEntity.ok(ApiResponse.success("", travelLogDetail));
+    }
+
+    /**
+     * 여행 일지 단건 조회시 해시태그 목록 조회 API
+     * GET /api/travel-logs/{id}/tags
+     */
+    @GetMapping("/{travelLogId}/tags")
+    public ResponseEntity<?> getTags(
+            @AuthenticationPrincipal String username
+            , @PathVariable Long travelLogId
+    ) {
+        List<TagResponseDto> responses = travelLogService.getTagsByTravelLog(username, travelLogId);
+        return ResponseEntity.ok(ApiResponse.success("", responses));
     }
 }

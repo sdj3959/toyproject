@@ -2,6 +2,7 @@ package com.spring.toyproject.service;
 
 import com.spring.toyproject.config.FileUploadConfig;
 import com.spring.toyproject.domain.dto.request.TravelLogRequestDto;
+import com.spring.toyproject.domain.dto.response.TagResponseDto;
 import com.spring.toyproject.domain.dto.response.TravelLogResponseDto;
 import com.spring.toyproject.domain.entity.*;
 import com.spring.toyproject.exception.BusinessException;
@@ -22,6 +23,7 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,6 +38,7 @@ public class TravelLogService {
     private final UserRepository userRepository;
     private final TravelPhotoRepository travelPhotoRepository;
     private final TagRepository tagRepository;
+    private final TravelLogTagRepository travelLogTagRepository;
 
     /**
      * 여행일지 생성
@@ -176,5 +179,28 @@ public class TravelLogService {
             return travelPhoto.getFilePath();
         }
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public TravelLogResponseDto getTravelLogDetail(String username, Long travelLogId) {
+
+        // 여행 일지 1개 불러오기
+        TravelLog travelLog = travelLogRepository.findById(travelLogId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TRAVEL_LOG_NOT_FOUND));
+
+        // 여행일지가 사용자의 여행에 속하는지 다시한번 확인
+        if (!travelLog.getTrip().getUser().equals(username)) {
+            throw new BusinessException(ErrorCode.TRAVEL_LOG_ACCESS_DENIED);
+        }
+
+        return TravelLogResponseDto.from(travelLog);
+    }
+
+    // 여행일지의 해시태그 목록 가져오기
+    public List<TagResponseDto> getTagsByTravelLog(String username, Long travelLogId) {
+
+        List<Tag> tags = travelLogTagRepository.findTagsByTravelLogId(travelLogId);
+
+        return tags.stream().map(TagResponseDto::from).collect(Collectors.toList());
     }
 }
