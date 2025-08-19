@@ -58,4 +58,10 @@ public class PageController {
         return "travel-log-form";
     }
 
+    // 여행 일지목록 페이지
+    @GetMapping("/travel-logs")
+    public String travelList() {
+        return "travel-log-list";
+    }
+
 }
